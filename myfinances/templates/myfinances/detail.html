@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Montly finance details</title>
+
+<body>
+	{% load static %}
+
+	<link rel="stylesheet" href="{% static 'myfinances/style.css' %}" />
+	<h1>Period statistic</h1>
+
+	<h2>Period: {{ monthlyfin.month_text }}</h2>
+
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">Date</th>
+				<th scope="col">Price</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if error_message %}
+			<p><strong>{{ error_message }}</strong></p>
+			{% endif %} {% for monthlist in monthlyfin.monthlist_set.all %}
+			<tr>
+				<td>{{monthlist.check_date}}</td>
+				<td>{{monthlist.check_price}}</td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<th>Total summ</th>
+				<td>{{ monthlyfin.summ }}</td>
+			</tr>
+		</tbody>
+
+	</table>
+
+	<hr>
+	<footer>
+		<p>
+			<a href="{% url 'myfinances:index'%}"> Back to Period List</a>
+		</p>
+		<p>
+			<a href="#">Back to top</a>
+		</p>
+	</footer>
+</body>
+
+</html>

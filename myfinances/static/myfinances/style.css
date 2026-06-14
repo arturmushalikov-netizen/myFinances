@@ -1,0 +1,33 @@
+li a {
+	color: white;
+}
+
+body {
+	background-color: #282b2e;
+	color: white;
+	/* background: black url('images/Image14.jpg') no-repeat; */
+}
+
+table,
+tr,
+td,
+th,
+caption {
+	border: 1px solid white;
+	font-family: 'Courier New', Courier, monospace;
+	border-collapse: collapse;
+	padding: 0.5rem;
+}
+
+a {
+	color: aliceblue;
+}
+
+a:visited {
+	color: lightgray;
+}
+
+a:hover,
+a:active {
+	color: #eee;
+}

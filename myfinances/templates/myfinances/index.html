@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Montly finance index</title>
+</head>
+
+<body>
+	<header>
+		{% load static %}
+
+		<link rel="stylesheet" href="{% static 'myfinances/style.css' %}" />
+		<h1>List of Montly Periods</h1>
+	</header>
+	<main>
+		{% if latest_monthlyfin_list %}
+		<ul>
+			{% for monthlyfin in latest_monthlyfin_list %}
+			<li>
+				<a href="{% url 'myfinances:detail' monthlyfin.id %}">{{ monthlyfin.month_text }} ---
+					{{monthlyfin.summ}}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% else %}
+		<p>No monthly finances are available.</p>
+		{% endif %}
+	</main>
+	<hr>
+	<footer>
+		<p>
+			<a href="#">Back to top</a>
+		</p>
+	</footer>
+</body>
+
+</html>
