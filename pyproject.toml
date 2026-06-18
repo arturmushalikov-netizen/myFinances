@@ -1,0 +1,22 @@
+[tool.uv.workspace]
+members = [
+    "django-docker",
+]
+
+[project]
+name = "django-docker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "django>=6.0.6",
+    "gunicorn>=26.0.0",
+    "psycopg2-binary>=2.9.12",
+    "asgiref==3.11.1",
+    "django-debug-toolbar==6.3.0",
+    "django-pgtrigger==4.17.0",
+    "packaging==26.2",
+    "sqlparse==0.5.5",
+    "tzdata==2026.2",
+]

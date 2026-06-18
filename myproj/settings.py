@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-k2s*%fi-n5%d2sws*e)d!l%c3c&yws^qbn1&mc&5&$)bbt398('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', '0') == '1'
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -74,14 +76,21 @@ WSGI_APPLICATION = 'myproj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
+        # "ENGINE": "django.db.backends.postgresql",
+        # "NAME": "Postrgre_finance",
+        # "USER": "Django_fin",
+        # "PASSWORD": "1234",
+        # "HOST": "127.0.0.1",
+        # "PORT": "5432",
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "Postrgre_finance",
-        "USER": "Django_fin",
-        "PASSWORD": "1234",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": os.environ.get("POSTGRES_DB", "myapp"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "password"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
 

@@ -4,4 +4,8 @@
 __pycache__
 .pg_service.conf
 .my_pgpass
+*.pyc
+.git
 migrations
+run
+db
