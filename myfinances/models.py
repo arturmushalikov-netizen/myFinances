@@ -19,6 +19,9 @@ class MonthlyFin(models.Model):
         )
     def last_montly_fin(self):
         return self.start_date <= timezone.now() <= self.end_date
+    
+    class Meta:
+        get_latest_by = "-end_date"
 
 class MonthList(models.Model):
     month = models.ForeignKey(MonthlyFin, on_delete=models.CASCADE)

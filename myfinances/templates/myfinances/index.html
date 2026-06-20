@@ -26,8 +26,39 @@
 			{% endfor %}
 		</ul>
 		{% else %}
-		<p>No monthly finances are available.</p>
+		<p>No monthly finances available.</p>
 		{% endif %}
+
+		<button class="add-btn" id="openAddPeriodPopup">Add new period.</button>
+
+		<dialog id="addPeriodPopup">
+			<h2>Add new period.</h2>
+			<form method="post" action="{% url 'myfinances:index' %}">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<button type="submit" class="submit-btn">Save</button>
+				<button type="button" class="close-btn" id="closeAddPeriodPopup">Cancel</button>
+			</form>
+		</dialog>
+
+		<script>
+			const popupAddPeriod = document.getElementById('addPeriodPopup');
+			const openAddPeriodBtn = document.getElementById('openAddPeriodPopup');
+			const closeAddPeriodBtn = document.getElementById('closeAddPeriodPopup');
+
+			openAddPeriodBtn.addEventListener('click', () => {
+				popupAddPeriod.showModal();
+			});
+
+			closeAddPeriodBtn.addEventListener('click', () => {
+				popupAddPeriod.close();
+			});
+
+
+			{% if form.errors %}
+			popupAddPeriod.showModal();
+			{% endif %}
+		</script>
 	</main>
 	<hr>
 	<footer>
