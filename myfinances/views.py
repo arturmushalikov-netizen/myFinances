@@ -25,6 +25,7 @@ class IndexView(generic.ListView):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("myfinances:index"))
+        self.object_list = self.get_queryset()
         context = self.get_context_data()
         context["form"] = form
         return self.render_to_response(context)
@@ -50,6 +51,7 @@ class DetailView(generic.DetailView):
             monthlist.month = monthlyfin
             monthlist.save()
             return HttpResponseRedirect(reverse("myfinances:detail", args=(monthlyfin.pk,)))
+        self.object = monthlyfin
         context = self.get_context_data(object=monthlyfin)
         context["form"] = form
         return self.render_to_response(context)
