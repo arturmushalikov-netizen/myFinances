@@ -6,38 +6,71 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Montly finance details</title>
+</head>
 
 <body>
 	{% load static %}
 
 	<link rel="stylesheet" href="{% static 'myfinances/style.css' %}" />
-	<h1>Period statistic</h1>
+	<main>
+		<h1>Period statistic</h1>
 
-	<h2>Period: {{ monthlyfin.month_text }}</h2>
+		<h2>Period: {{ monthlyfin.month_text }}</h2>
 
-	<table>
-		<thead>
-			<tr>
-				<th scope="col">Date</th>
-				<th scope="col">Price</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% if error_message %}
-			<p><strong>{{ error_message }}</strong></p>
-			{% endif %} {% for monthlist in monthlyfin.monthlist_set.all %}
-			<tr>
-				<td>{{monthlist.check_date}}</td>
-				<td>{{monthlist.check_price}}</td>
-			</tr>
-			{% endfor %}
-			<tr>
-				<th>Total summ</th>
-				<td>{{ monthlyfin.summ }}</td>
-			</tr>
-		</tbody>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Date</th>
+					<th scope="col">Price</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if error_message %}
+				<p><strong>{{ error_message }}</strong></p>
+				{% endif %} {% for monthlist in monthlyfin.monthlist_set.all %}
+				<tr>
+					<td>{{monthlist.check_date}}</td>
+					<td>{{monthlist.check_price}}</td>
+				</tr>
+				{% endfor %}
+				<tr>
+					<th>Total summ</th>
+					<td>{{ monthlyfin.summ }}</td>
+				</tr>
+			</tbody>
 
-	</table>
+		</table>
+
+		<button class="add-btn" id="openAddCheckPopup">Add new check.</button>
+
+		<dialog id="addCheckPopup">
+			<h2>Add new check</h2>
+			<form method="post" action="{% url 'myfinances:detail' monthlyfin.id %}">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<button type="submit" class="submit-btn">Save</button>
+				<button type="button" class="close-btn" id="closeAddCheckPopup">Cancel</button>
+			</form>
+		</dialog>
+
+		<script>
+			const addCheckPopup = document.getElementById('addCheckPopup');
+			const openAddCheckPopup = document.getElementById('openAddCheckPopup');
+			const closeAddCheckPopup = document.getElementById('closeAddCheckPopup');
+
+			openAddCheckPopup.addEventListener('click', () => {
+				addCheckPopup.showModal();
+			});
+
+			closeAddCheckPopup.addEventListener('click', () => {
+				addCheckPopup.close();
+			});
+
+			if form.errors
+				addCheckPopup.showModal();
+			endif
+		</script>
+	</main>
 
 	<hr>
 	<footer>

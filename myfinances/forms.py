@@ -1,5 +1,5 @@
 from django import forms
-from .models import MonthlyFin
+from .models import MonthList, MonthlyFin
 
 
 class MonthlyFinForm(forms.ModelForm):
@@ -17,3 +17,12 @@ class MonthlyFinForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class MonthListForm(forms.ModelForm):
+    class Meta:
+        model = MonthList
+        fields = ["check_date", "check_price"]
+        widgets = {
+            "check_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
