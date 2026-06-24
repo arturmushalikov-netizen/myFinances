@@ -6,6 +6,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Montly finance details</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
 </head>
 
 <body>
@@ -13,74 +15,81 @@
 
 	<link rel="stylesheet" href="{% static 'myfinances/style.css' %}" />
 	<main>
-		<h1>Period statistic</h1>
 
-		<h2>Period: {{ monthlyfin.month_text }}</h2>
+		<div class="container-fluid">
 
-		<table>
-			<thead>
-				<tr>
-					<th scope="col">Date</th>
-					<th scope="col">Price</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% if error_message %}
-				<p><strong>{{ error_message }}</strong></p>
-				{% endif %} {% for monthlist in monthlyfin.monthlist_set.all %}
-				<tr>
-					<td>{{monthlist.check_date}}</td>
-					<td>{{monthlist.check_price}}</td>
-				</tr>
-				{% endfor %}
-				<tr>
-					<th>Total summ</th>
-					<td>{{ monthlyfin.summ }}</td>
-				</tr>
-			</tbody>
+			<h1>Period statistic</h1>
 
-		</table>
+			<h2>Period: {{ monthlyfin.month_text }}</h2>
 
-		<button class="add-btn" id="openAddCheckPopup">Add new check.</button>
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCheckModal">
+				Add new check.
+			</button>
 
-		<dialog id="addCheckPopup">
-			<h2>Add new check</h2>
-			<form method="post" action="{% url 'myfinances:detail' monthlyfin.id %}">
-				{% csrf_token %}
-				{{ form.as_p }}
-				<button type="submit" class="submit-btn">Save</button>
-				<button type="button" class="close-btn" id="closeAddCheckPopup">Cancel</button>
-			</form>
-		</dialog>
+			<div class="table-responsive-md">
+				<table class="table table-bordered table-hover table-striped table-info">
+					<thead>
+						<tr>
+							<th scope="col">Date</th>
+							<th scope="col">Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if error_message %}
+						<p><strong>{{ error_message }}</strong></p>
+						{% endif %} {% for monthlist in monthlyfin.monthlist_set.all %}
+						<tr>
+							<td>{{monthlist.check_date}}</td>
+							<td>{{monthlist.check_price}}</td>
+						</tr>
+						{% endfor %}
+						<tr>
+							<th>Total sum</th>
+							<td>{{ monthlyfin.summ }}</td>
+						</tr>
+					</tbody>
 
-		<script>
-			const addCheckPopup = document.getElementById('addCheckPopup');
-			const openAddCheckPopup = document.getElementById('openAddCheckPopup');
-			const closeAddCheckPopup = document.getElementById('closeAddCheckPopup');
+				</table>
+			</div>
+		</div>
 
-			openAddCheckPopup.addEventListener('click', () => {
-				addCheckPopup.showModal();
-			});
-
-			closeAddCheckPopup.addEventListener('click', () => {
-				addCheckPopup.close();
-			});
-
-			if form.errors
-				addCheckPopup.showModal();
-			endif
-		</script>
+		<div class="modal fade" id="AddCheckModal" tabindex="-1" aria-labelledby="addCheckLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addCheckLabel">Add new check</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form method="post" action="{% url 'myfinances:detail' monthlyfin.id %}">
+							{% csrf_token %}
+							{{ form.as_p }}
+							<button type="submit" class="btn btn-primary">Save changes</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</main>
 
 	<hr>
 	<footer>
-		<p>
-			<a href="{% url 'myfinances:index'%}"> Back to Period List</a>
-		</p>
-		<p>
-			<a href="#">Back to top</a>
-		</p>
+		<div class="container-fluid my-5">
+			<a href="{% url 'myfinances:index'%}">
+				<button type="button" class="btn btn-outline-primary">Back to Period
+					List</button>
+			</a>
+			<a href="#">
+				<button type="button" class="btn btn-outline-light" href="#">Back to top</button>
+			</a>
+		</div>
 	</footer>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+		integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+		integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>
