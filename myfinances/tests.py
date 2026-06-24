@@ -1,10 +1,10 @@
 import datetime
 
 from django.test import TestCase
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 
-from .models import MonthlyFin, MonthList
+from .models import MonthList, MonthlyFin
 
 
 def create_monthlyfin(month_text: str, start_date, end_date):
@@ -15,7 +15,9 @@ def create_monthlyfin(month_text: str, start_date, end_date):
 
 class MonthlyFinModelTests(TestCase):
     def test_str_returns_month_text(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         self.assertEqual(str(monthlyfin), "Test")
 
     def test_last_montly_fin_start_date_less_then_end_date(self):
@@ -44,36 +46,47 @@ class MonthlyFinModelTests(TestCase):
         self.assertFalse(monthlyfin.last_montly_fin())
 
     def test_sum_defaults_to_zero(self):
-        monthlyfin = create_monthlyfin("Default", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Default", timezone.now().date(), timezone.now().date()
+        )
         self.assertEqual(monthlyfin.summ, 0)
 
     def test_get_latest_by_end_date_desc(self):
-        early = create_monthlyfin("Early", timezone.now().date(), timezone.now().date() - datetime.timedelta(days=1))
-        late = create_monthlyfin("Late", timezone.now().date(), timezone.now().date() + datetime.timedelta(days=1))
+        early = create_monthlyfin(
+            "Early",
+            timezone.now().date(),
+            timezone.now().date() - datetime.timedelta(days=1),
+        )
         self.assertEqual(MonthlyFin.objects.latest(), early)
 
 
 class MonthListModelTests(TestCase):
     def test_str_returns_formatted_date(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
-        monthlist = MonthList.objects.create(
-            month=monthlyfin, check_price=100
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
         )
+        monthlist = MonthList.objects.create(month=monthlyfin, check_price=100)
         expected = monthlist.check_date.strftime("%Y-%m-%d %H:%M")
         self.assertEqual(str(monthlist), expected)
 
     def test_check_price_defaults_to_zero(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         monthlist = MonthList.objects.create(month=monthlyfin)
         self.assertEqual(monthlist.check_price, 0)
 
     def test_check_date_defaults_to_now(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         monthlist = MonthList.objects.create(month=monthlyfin, check_price=50)
         self.assertIsNotNone(monthlist.check_date)
 
     def test_cascade_delete(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         MonthList.objects.create(month=monthlyfin, check_price=50)
         monthlyfin.delete()
         self.assertEqual(MonthList.objects.count(), 0)
@@ -121,7 +134,9 @@ class MonthlyFinIndexViewTests(TestCase):
 
 class DetailViewTests(TestCase):
     def test_get_valid_pk(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         response = self.client.get(reverse("myfinances:detail", args=(monthlyfin.pk,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Period statistic")
@@ -132,12 +147,16 @@ class DetailViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_form_in_context(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         response = self.client.get(reverse("myfinances:detail", args=(monthlyfin.pk,)))
         self.assertIn("form", response.context)
 
     def test_post_valid_creates_monthlist(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
         response = self.client.post(
             reverse("myfinances:detail", args=(monthlyfin.pk,)),
             {"check_price": "99.99", "check_date": "2026-06-20T12:00"},
@@ -146,7 +165,11 @@ class DetailViewTests(TestCase):
         self.assertEqual(monthlyfin.monthlist_set.count(), 1)
 
     def test_post_invalid_shows_errors(self):
-        monthlyfin = create_monthlyfin("Test", timezone.now().date(), timezone.now().date())
-        response = self.client.post(reverse("myfinances:detail", args=(monthlyfin.pk,)), {})
+        monthlyfin = create_monthlyfin(
+            "Test", timezone.now().date(), timezone.now().date()
+        )
+        response = self.client.post(
+            reverse("myfinances:detail", args=(monthlyfin.pk,)), {}
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context["form"].errors)

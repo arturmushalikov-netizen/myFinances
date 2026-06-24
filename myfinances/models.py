@@ -1,9 +1,8 @@
-import datetime
-
-from django.utils import timezone
-from django.db import models
-from django.contrib import admin
 import pgtrigger
+from django.contrib import admin
+from django.db import models
+from django.utils import timezone
+
 
 class MonthlyFin(models.Model):
     month_text = models.CharField(max_length=200)
@@ -13,15 +12,17 @@ class MonthlyFin(models.Model):
 
     def __str__(self):
         return self.month_text
+
     @admin.display(
         boolean=True,
         ordering="start_date",
-        )
+    )
     def last_montly_fin(self):
         return self.start_date <= timezone.now().date() <= self.end_date
-    
+
     class Meta:
         get_latest_by = "-end_date"
+
 
 class MonthList(models.Model):
     month = models.ForeignKey(MonthlyFin, on_delete=models.CASCADE)

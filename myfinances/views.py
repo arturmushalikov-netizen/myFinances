@@ -1,12 +1,10 @@
-from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
-from django.utils import timezone
 
-from .forms import MonthlyFinForm, MonthListForm
-from .models import MonthList, MonthlyFin
+from .forms import MonthListForm, MonthlyFinForm
+from .models import MonthlyFin
+
 
 class IndexView(generic.ListView):
     template_name = "myfinances/index.html"
@@ -50,7 +48,9 @@ class DetailView(generic.DetailView):
             monthlist = form.save(commit=False)
             monthlist.month = monthlyfin
             monthlist.save()
-            return HttpResponseRedirect(reverse("myfinances:detail", args=(monthlyfin.pk,)))
+            return HttpResponseRedirect(
+                reverse("myfinances:detail", args=(monthlyfin.pk,))
+            )
         self.object = monthlyfin
         context = self.get_context_data(object=monthlyfin)
         context["form"] = form

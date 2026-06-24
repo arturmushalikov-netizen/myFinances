@@ -9,3 +9,4 @@ __pycache__
 migrations
 run
 db
+.ruff_cache

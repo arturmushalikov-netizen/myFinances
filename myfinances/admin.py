@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import MonthlyFin, MonthList
+from .models import MonthList, MonthlyFin
+
 
 class ChecksInline(admin.TabularInline):
     model = MonthList
