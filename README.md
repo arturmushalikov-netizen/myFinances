@@ -1,4 +1,4 @@
-# myFinances
+# myfinances
 
 Simple site for managing finances.
 PostgreSQL database.
